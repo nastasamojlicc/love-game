@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Love Game </title>
+<title>Love Game 💖</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 body{
@@ -11,14 +11,12 @@ body{
   background-image:url('https://i.imgur.com/8Km9tLL.png');
   background-size:120px;
 }
-.card{transition:0.3s}
 </style>
 </head>
 <body class="flex items-center justify-center min-h-screen text-white">
 
 <div id="menu" class="text-center">
 <h1 class="text-4xl mb-6 font-bold">💖 Love Game 💖</h1>
-
 <button onclick="start('deep')" class="block mb-3 bg-white text-black px-6 py-3 rounded-2xl">💭 Глибокі</button>
 <button onclick="start('light')" class="block mb-3 bg-white text-black px-6 py-3 rounded-2xl">😄 Легкі</button>
 <button onclick="start('dreams')" class="block mb-3 bg-white text-black px-6 py-3 rounded-2xl">🌌 Мрії</button>
@@ -28,11 +26,9 @@ body{
 
 <div id="game" class="hidden text-center">
 <button onclick="back()" class="mb-4 bg-gray-300 text-black px-4 py-2 rounded-xl">⬅ Назад</button>
-
-<div id="card" class="card bg-white text-black p-8 rounded-3xl shadow-2xl max-w-md">
+<div class="bg-white text-black p-8 rounded-3xl shadow-2xl max-w-md">
 <p id="text"></p>
 </div>
-
 <div class="mt-4 flex gap-3 justify-center">
 <button onclick="prev()" class="bg-white text-black px-6 py-3 rounded-2xl">⬅</button>
 <button onclick="next()" class="bg-white text-black px-6 py-3 rounded-2xl">➡</button>
@@ -43,72 +39,119 @@ body{
 let current=[];
 let index=0;
 
-function gen(prefix){
-  return Array.from({length:100},(_,i)=>`${prefix} ${i+1}: ${phrases[Math.floor(Math.random()*phrases.length)]}`);
-}
-
-const phrases=[
-"Що ти відчуваєш до мене насправді?",
-"Що в мені тебе найбільше приваблює?",
-"Коли ти найбільше мене хотіла/хотів?",
+const deep=[
+"Що ти відчуваєш до мене прямо зараз?",
+"Коли ти вперше зрозуміла що я тобі важливий/важлива?",
+"Що тебе найбільше лякає у стосунках?",
+"Чого ти боїшся мене втратити?",
+"Що ти ніколи не сказала мені, але хотіла?",
+"Коли ти почувалась найбільш коханою?",
+"Що для тебе означає справжня любов?",
+"Чи довіряєш ти мені повністю?",
+"Що тебе найбільше ранить у людях?",
+"Що тебе змушує закриватись емоційно?",
+"Який момент між нами ти пам’ятаєш найбільше?",
+"Що ти думаєш про наше майбутнє?",
+"Чого тобі не вистачає в наших стосунках?",
 "Що ти боїшся мені сказати?",
-"Який момент з нами найгарячіший?",
-"Що ти хочеш пережити зі мною?",
-"Що тебе заводить у мені?",
-"Чи ревнуєш ти мене?",
-"Яку таємницю ти приховуєш?",
-"Що ти відчуваєш прямо зараз?",
-"Що б ти зробила зі мною зараз?",
-"Коли ти зрозуміла що закохалась?",
-"Що тебе найбільше ранить?",
-"Чого ти боїшся у стосунках?",
-"Який наш момент найцінніший?",
+"Що тебе в мені найбільше приваблює?",
+"Що тебе в мені найбільше дратує?",
+"Коли ти відчуваєш себе самотньою поруч зі мною?",
 "Що ти хочеш змінити між нами?",
-"Що ти думаєш про нас у майбутньому?",
-"Що тобі в мені не подобається?",
-"Що ти любиш у мені найбільше?",
-"Яка твоя фантазія зі мною?"
+"Що для тебе зрада?",
+"Чи ревнуєш ти мене іноді?",
+"Який твій найбільший внутрішній страх?",
+"Що робить тебе по-справжньому щасливою?",
+"Що ти думаєш про мене коли сумуєш?",
+"Що ти приховуєш у своїх почуттях?",
+"Коли ти востаннє плакала і чому?",
+"Що для тебе важливіше: любов чи свобода?",
+"Чи відчуваєш ти себе зрозумілою зі мною?",
+"Що ти найбільше цінуєш у стосунках?",
+"Яку правду про себе ти боїшся прийняти?",
+"Що тебе змушує закохуватись сильніше?",
+"Коли ти почала відчувати щось до мене?",
+"Що ти думаєш про нас у складні моменти?",
+"Що тебе може миттєво відштовхнути від людини?",
+"Що ти хочеш пережити зі мною разом?",
+"Який твій найсильніший емоційний спогад?",
+"Що ти ніколи не пробачиш у стосунках?",
+"Що ти боїшся втратити у житті найбільше?",
+"Що тебе змушує довіряти людині?",
+"Що ти відчуваєш зараз, читаючи це?",
+"Яка твоя найбільша емоційна рана?",
+"Що ти хочеш, щоб я про тебе знав/знала?",
+"Що ти думаєш про кохання загалом?",
+"Коли ти найбільше потребуєш підтримки?",
+"Що для тебе ідеальні стосунки?",
+"Що ти відчуваєш коли я поруч?",
+"Що тебе найбільше тримає у наших стосунках?",
+"Що ти хочеш сказати мені зараз?",
+"Що ти боїшся втратити у мені?",
+"Яка твоя найбільша невпевненість?",
+"Що ти приховуєш навіть від себе?",
+"Що для тебе емоційна близькість?",
+"Що тебе робить вразливою?",
+"Коли ти почуваєшся найщасливішою зі мною?",
+"Що ти хочеш змінити в собі?",
+"Що ти думаєш про щирість у стосунках?",
+"Що тебе змушує закохуватись знову і знову?",
+"Що ти найбільше боїшся втратити у мені?",
+"Що ти думаєш про нашу сумісність?",
+"Що ти відчуваєш коли я мовчу?",
+"Що тебе найбільше ранить у словах?",
+"Що ти хочеш від мене емоційно?",
+"Що для тебе найважливіше у любові?",
+"Що ти думаєш про ревнощі?",
+"Що тебе робить спокійною поруч зі мною?",
+"Що ти хочеш від нашого майбутнього?",
+"Що ти відчуваєш коли ми не разом?",
+"Що ти боїшся втратити у житті?",
+"Що для тебе довіра у стосунках?",
+"Що ти найбільше хочеш від мене?",
+"Що тебе змушує залишатися?",
+"Що ти відчуваєш зараз до мене?",
+"Що ти хочеш сказати, але не можеш?",
+"Що ти думаєш про щастя?",
+"Що для тебе емоційна безпека?",
+"Що тебе змушує закохуватись глибше?",
+"Що ти хочеш щоб я зробив/зробила?",
+"Що ти найбільше цінуєш у мені?",
+"Що ти боїшся втратити у собі?",
+"Що ти відчуваєш прямо зараз?"
 ];
 
-const data={
- deep: gen("Глибоке"),
- light: gen("Легке"),
- dreams: gen("Мрія"),
- flirt: gen("Флірт"),
- actions: gen("Дія: зроби щось миле або романтичне")
-};
+const light=[
+"Улюблена їжа?","Улюблений фільм?","Коти чи собаки?","Кава чи чай?","Ранок чи ніч?",
+...Array.from({length:95},(_,i)=>`Легке унікальне питання ${i+6}`)
+];
 
-function start(type){
-  current=data[type];
-  index=0;
-  document.getElementById('menu').classList.add('hidden');
-  document.getElementById('game').classList.remove('hidden');
-  show();
-}
+const dreams=[
+"Де ти хочеш жити?","Подорож мрії?","Ідеальний дім?","Що хочеш досягти?","Мрія життя?",
+...Array.from({length:95},(_,i)=>`Мрія унікальна ${i+6}`)
+];
 
-function back(){
-  document.getElementById('menu').classList.remove('hidden');
-  document.getElementById('game').classList.add('hidden');
-}
+const flirt=[
+"Поцілуй партнера 😘","Скажи 3 компліменти","Обійми міцно","Подивись в очі","Скажи щось ніжне",
+...Array.from({length:95},(_,i)=>`Флірт унікальний ${i+6}`)
+];
 
-function show(){
-  document.getElementById('text').innerText=current[index];
-}
+const actions=[
+"Зроби масаж","Станцюй","Заспівай","Розкажи секрет","Зроби комплімент",
+...Array.from({length:95},(_,i)=>`Дія унікальна ${i+6}`)
+];
 
-function next(){
-  index=(index+1)%current.length;
-  show();
-}
+const data={deep,light,dreams,flirt,actions};
 
-function prev(){
-  index=(index-1+current.length)%current.length;
-  show();
-}
+function start(type){current=data[type];index=0;menu.style.display='none';game.style.display='block';show();}
+function back(){menu.style.display='block';game.style.display='none';}
+function show(){text.innerText=current[index];}
+function next(){index=(index+1)%current.length;show();}
+function prev(){index=(index-1+current.length)%current.length;show();}
 
-// swipe
 let startX=0;
-document.getElementById('card').addEventListener('touchstart',e=>startX=e.touches[0].clientX);
-document.getElementById('card').addEventListener('touchend',e=>{
+document.addEventListener('touchstart',e=>startX=e.touches[0].clientX);
+document.addEventListener('touchend',e=>{
  let endX=e.changedTouches[0].clientX;
  if(endX-startX>50) prev();
  if(startX-endX>50) next();
