@@ -1,112 +1,118 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Love Game 💖</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    .card { transition: transform 0.3s ease; }
-    .card:active { transform: scale(0.95); }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Love Game </title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{
+  background: linear-gradient(135deg,#ff4d4d,#4d79ff);
+  background-image:url('https://i.imgur.com/8Km9tLL.png');
+  background-size:120px;
+}
+.card{transition:0.3s}
+</style>
 </head>
-<body class="bg-gradient-to-br from-pink-200 to-purple-200 flex flex-col items-center justify-center min-h-screen p-4">
+<body class="flex items-center justify-center min-h-screen text-white">
 
-<h1 class="text-4xl font-bold mb-4">💖 Love Game 💖</h1>
+<div id="menu" class="text-center">
+<h1 class="text-4xl mb-6 font-bold">💖 Love Game 💖</h1>
 
-<div class="mb-3">
-  <label>Гравець:</label>
-  <span id="player" class="font-bold">1</span>
+<button onclick="start('deep')" class="block mb-3 bg-white text-black px-6 py-3 rounded-2xl">💭 Глибокі</button>
+<button onclick="start('light')" class="block mb-3 bg-white text-black px-6 py-3 rounded-2xl">😄 Легкі</button>
+<button onclick="start('dreams')" class="block mb-3 bg-white text-black px-6 py-3 rounded-2xl">🌌 Мрії</button>
+<button onclick="start('flirt')" class="block mb-3 bg-white text-black px-6 py-3 rounded-2xl">❤️ Флірт</button>
+<button onclick="start('actions')" class="block mb-3 bg-white text-black px-6 py-3 rounded-2xl">🔥 Дії</button>
 </div>
 
-<select id="category" class="mb-4 p-3 rounded-2xl shadow">
-  <option>Глибокі питання</option>
-  <option>Легкі питання</option>
-  <option>Мрії</option>
-  <option>Флірт</option>
-  <option>Дії</option>
-</select>
+<div id="game" class="hidden text-center">
+<button onclick="back()" class="mb-4 bg-gray-300 text-black px-4 py-2 rounded-xl">⬅ Назад</button>
 
-<div class="flex gap-3 mb-4">
-  <button onclick="drawCard()" class="bg-pink-500 text-white px-6 py-3 rounded-2xl">🎴 Картка</button>
-  <button onclick="skip()" class="bg-gray-400 text-white px-6 py-3 rounded-2xl">⏭ Пропустити</button>
+<div id="card" class="card bg-white text-black p-8 rounded-3xl shadow-2xl max-w-md">
+<p id="text"></p>
 </div>
 
-<div id="card" class="hidden card mt-6 p-8 bg-white rounded-3xl shadow-2xl max-w-md text-center">
-  <div id="emoji" class="text-5xl mb-4"></div>
-  <p id="text" class="text-lg"></p>
+<div class="mt-4 flex gap-3 justify-center">
+<button onclick="prev()" class="bg-white text-black px-6 py-3 rounded-2xl">⬅</button>
+<button onclick="next()" class="bg-white text-black px-6 py-3 rounded-2xl">➡</button>
+</div>
 </div>
 
 <script>
-let currentPlayer = 1;
+let current=[];
+let index=0;
 
-const emojis = {
-  "Глибокі питання": "💭",
-  "Легкі питання": "😄",
-  "Мрії": "🌌",
-  "Флірт": "❤️",
-  "Дії": "🔥"
+function gen(prefix){
+  return Array.from({length:100},(_,i)=>`${prefix} ${i+1}: ${phrases[Math.floor(Math.random()*phrases.length)]}`);
+}
+
+const phrases=[
+"Що ти відчуваєш до мене насправді?",
+"Що в мені тебе найбільше приваблює?",
+"Коли ти найбільше мене хотіла/хотів?",
+"Що ти боїшся мені сказати?",
+"Який момент з нами найгарячіший?",
+"Що ти хочеш пережити зі мною?",
+"Що тебе заводить у мені?",
+"Чи ревнуєш ти мене?",
+"Яку таємницю ти приховуєш?",
+"Що ти відчуваєш прямо зараз?",
+"Що б ти зробила зі мною зараз?",
+"Коли ти зрозуміла що закохалась?",
+"Що тебе найбільше ранить?",
+"Чого ти боїшся у стосунках?",
+"Який наш момент найцінніший?",
+"Що ти хочеш змінити між нами?",
+"Що ти думаєш про нас у майбутньому?",
+"Що тобі в мені не подобається?",
+"Що ти любиш у мені найбільше?",
+"Яка твоя фантазія зі мною?"
+];
+
+const data={
+ deep: gen("Глибоке"),
+ light: gen("Легке"),
+ dreams: gen("Мрія"),
+ flirt: gen("Флірт"),
+ actions: gen("Дія: зроби щось миле або романтичне")
 };
 
-function generateSet(base) {
-  return Array.from({ length: 100 }, (_, i) => `${base} ${i+1}`);
+function start(type){
+  current=data[type];
+  index=0;
+  document.getElementById('menu').classList.add('hidden');
+  document.getElementById('game').classList.remove('hidden');
+  show();
 }
 
-const data = {
-  "Глибокі питання": [
-    "Що для тебе означає кохання?",
-    "Коли ти щаслива зі мною?",
-    "Чого ти боїшся у стосунках?",
-    "Що тебе ранить найбільше?",
-    ...generateSet("Глибоке питання")
-  ],
-  "Легкі питання": [
-    "Улюблена їжа?",
-    "Коти чи собаки?",
-    "Кава чи чай?",
-    "День чи ніч?",
-    ...generateSet("Легке питання")
-  ],
-  "Мрії": [
-    "Де хочеш жити?",
-    "Подорож мрії?",
-    "Ідеальне життя?",
-    ...generateSet("Мрія")
-  ],
-  "Флірт": [
-    "Поцілуй партнера 😘",
-    "Скажи 3 компліменти 💕",
-    "Обійми 🤗",
-    ...generateSet("Флірт")
-  ],
-  "Дії": [
-    "Зроби масаж 💆",
-    "Станцюй 💃",
-    "Заспівай 🎤",
-    ...generateSet("Дія")
-  ]
-};
-
-function drawCard() {
-  const category = document.getElementById("category").value;
-  const items = data[category];
-  const random = items[Math.floor(Math.random() * items.length)];
-
-  document.getElementById("emoji").innerText = emojis[category];
-  document.getElementById("text").innerText = random;
-  document.getElementById("card").classList.remove("hidden");
-
-  nextPlayer();
+function back(){
+  document.getElementById('menu').classList.remove('hidden');
+  document.getElementById('game').classList.add('hidden');
 }
 
-function nextPlayer() {
-  currentPlayer = currentPlayer === 1 ? 2 : 1;
-  document.getElementById("player").innerText = currentPlayer;
+function show(){
+  document.getElementById('text').innerText=current[index];
 }
 
-function skip() {
-  nextPlayer();
+function next(){
+  index=(index+1)%current.length;
+  show();
 }
+
+function prev(){
+  index=(index-1+current.length)%current.length;
+  show();
+}
+
+// swipe
+let startX=0;
+document.getElementById('card').addEventListener('touchstart',e=>startX=e.touches[0].clientX);
+document.getElementById('card').addEventListener('touchend',e=>{
+ let endX=e.changedTouches[0].clientX;
+ if(endX-startX>50) prev();
+ if(startX-endX>50) next();
+});
 </script>
 
 </body>
