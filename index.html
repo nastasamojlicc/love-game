@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Love Game 💖</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .card { transition: transform 0.3s ease; }
+    .card:active { transform: scale(0.95); }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-pink-200 to-purple-200 flex flex-col items-center justify-center min-h-screen p-4">
+
+<h1 class="text-4xl font-bold mb-4">💖 Love Game 💖</h1>
+
+<div class="mb-3">
+  <label>Гравець:</label>
+  <span id="player" class="font-bold">1</span>
+</div>
+
+<select id="category" class="mb-4 p-3 rounded-2xl shadow">
+  <option>Глибокі питання</option>
+  <option>Легкі питання</option>
+  <option>Мрії</option>
+  <option>Флірт</option>
+  <option>Дії</option>
+</select>
+
+<div class="flex gap-3 mb-4">
+  <button onclick="drawCard()" class="bg-pink-500 text-white px-6 py-3 rounded-2xl">🎴 Картка</button>
+  <button onclick="skip()" class="bg-gray-400 text-white px-6 py-3 rounded-2xl">⏭ Пропустити</button>
+</div>
+
+<div id="card" class="hidden card mt-6 p-8 bg-white rounded-3xl shadow-2xl max-w-md text-center">
+  <div id="emoji" class="text-5xl mb-4"></div>
+  <p id="text" class="text-lg"></p>
+</div>
+
+<script>
+let currentPlayer = 1;
+
+const emojis = {
+  "Глибокі питання": "💭",
+  "Легкі питання": "😄",
+  "Мрії": "🌌",
+  "Флірт": "❤️",
+  "Дії": "🔥"
+};
+
+function generateSet(base) {
+  return Array.from({ length: 100 }, (_, i) => `${base} ${i+1}`);
+}
+
+const data = {
+  "Глибокі питання": [
+    "Що для тебе означає кохання?",
+    "Коли ти щаслива зі мною?",
+    "Чого ти боїшся у стосунках?",
+    "Що тебе ранить найбільше?",
+    ...generateSet("Глибоке питання")
+  ],
+  "Легкі питання": [
+    "Улюблена їжа?",
+    "Коти чи собаки?",
+    "Кава чи чай?",
+    "День чи ніч?",
+    ...generateSet("Легке питання")
+  ],
+  "Мрії": [
+    "Де хочеш жити?",
+    "Подорож мрії?",
+    "Ідеальне життя?",
+    ...generateSet("Мрія")
+  ],
+  "Флірт": [
+    "Поцілуй партнера 😘",
+    "Скажи 3 компліменти 💕",
+    "Обійми 🤗",
+    ...generateSet("Флірт")
+  ],
+  "Дії": [
+    "Зроби масаж 💆",
+    "Станцюй 💃",
+    "Заспівай 🎤",
+    ...generateSet("Дія")
+  ]
+};
+
+function drawCard() {
+  const category = document.getElementById("category").value;
+  const items = data[category];
+  const random = items[Math.floor(Math.random() * items.length)];
+
+  document.getElementById("emoji").innerText = emojis[category];
+  document.getElementById("text").innerText = random;
+  document.getElementById("card").classList.remove("hidden");
+
+  nextPlayer();
+}
+
+function nextPlayer() {
+  currentPlayer = currentPlayer === 1 ? 2 : 1;
+  document.getElementById("player").innerText = currentPlayer;
+}
+
+function skip() {
+  nextPlayer();
+}
+</script>
+
+</body>
+</html>
